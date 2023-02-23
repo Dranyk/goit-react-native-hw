@@ -1,30 +1,22 @@
 import { StyleSheet, View } from "react-native";
-import { useState } from "react";
+import { useState, useCallback  } from "react";
 
-// import * as Font from "expo-font";
-// import { AppLoading } from "expo";
+import { useFonts } from 'expo-font';
+
 import LoginScreen from "./Screens/Authorization/LoginScreen";
 import RegistrationScreen from "./Screens/Authorization/RegistrationScreen";
 
-// const loadApplication = async () => {
-//   await Font.loadAsync({
-//     "Roboto-Regular": require("./fonts/Roboto/Roboto-Regular.ttf"),
-//     "Roboto-Bold": require("./fonts/Roboto/Roboto-Bold.ttf"),
-//   });
-// };
 
 export default function App() {
-  // const [isReady, setIsReady] = useState(false);
 
-  // if (!isReady) {
-  //   return (
-  //     <AppLoading
-  //       startAsync={loadApplication}
-  //       onFinish={() => setIsReady(true)}
-  //       onError={console.warn}
-  //     />
-  //   );
-  // }
+  const [loaded] = useFonts({
+    'Roboto-Bold': require('./assets/fonts/Roboto-Bold.ttf'),
+    'Roboto-Regular': require('./assets/fonts/Roboto-Regular.ttf'),
+  });
+
+  if (!loaded) {
+    return null;
+  }
 
   return (
     <>

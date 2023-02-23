@@ -22,21 +22,23 @@ const initialState = {
 const LoginScreen = () => {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [state, setState] = useState(initialState);
-  const [hidePass, setHidePass] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
+
   const [dimensions, setDimensions] = useState(
     Dimensions.get("window").width - 16 * 2
   );
 
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
   useEffect(() => {
     const onChange = () => {
-      const width = Dimensions.get("window").width - 20 * 2;
+      const newDimensions = Dimensions.get("window").width - 16 * 2;
 
-      setDimensions(width);
+      setDimensions(newDimensions);
     };
     Dimensions.addEventListener("change", onChange);
-    return () => {
-      Dimensions.removeEventListener("change", onChange);
-    };
   }, []);
 
   const keyboardHide = () => {
@@ -86,7 +88,7 @@ const LoginScreen = () => {
                   <TextInput
                     onFocus={() => setIsShowKeyboard(true)}
                     placeholder="Пароль"
-                    secureTextEntry={true}
+                    secureTextEntry={!showPassword}
                     style={styles.input}
                     value={state.password}
                     onChangeText={(value) =>
@@ -99,7 +101,7 @@ const LoginScreen = () => {
 
                   <Text
                     style={styles.inputShowPasword}
-                    onPress={() => setHidePass(!hidePass)}
+                    onPress={toggleShowPassword}
                   >
                     Показати
                   </Text>
@@ -111,7 +113,7 @@ const LoginScreen = () => {
                 >
                   <Text style={styles.btnText}>Увійти</Text>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity style={styles.singInText}>
                   <Text style={styles.singInText}>
                     Немає облікового запису? Зареєструватись
                   </Text>

@@ -24,22 +24,24 @@ const initialState = {
 const RegistrationScreen = () => {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [state, setState] = useState(initialState);
-  const [hidePass, setHidePass] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
   const [dimensions, setDimensions] = useState(
     Dimensions.get("window").width - 16 * 2
   );
+
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
 
   // useEffect(() => {}, [])
 
   useEffect(() => {
     const onChange = () => {
-      const width = Dimensions.get("window").width - 20 * 2;
-      setDimensions(width);
+      const newDimensions = Dimensions.get("window").width - 16 * 2;
+
+      setDimensions(newDimensions);
     };
     Dimensions.addEventListener("change", onChange);
-    return () => {
-      Dimensions.removeEventListener("change", onChange);
-    };
   }, []);
 
   const keyboardHide = () => {
@@ -105,7 +107,7 @@ const RegistrationScreen = () => {
                   <TextInput
                     onFocus={() => setIsShowKeyboard(true)}
                     placeholder="Пароль"
-                    secureTextEntry={true}
+                    secureTextEntry={!showPassword}
                     style={styles.input}
                     value={state.password}
                     onChangeText={(value) =>
@@ -117,7 +119,7 @@ const RegistrationScreen = () => {
                   />
                   <Text
                     style={styles.inputShowPasword}
-                    onPress={() => setHidePass(!hidePass)}
+                    onPress={toggleShowPassword}
                   >
                     Показати
                   </Text>
@@ -129,7 +131,7 @@ const RegistrationScreen = () => {
                 >
                   <Text style={styles.btnText}>Увійти</Text>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity style={styles.singInText}>
                   <Text style={styles.singInText}>Вже є акаунт? Увійти</Text>
                 </TouchableOpacity>
               </View>
