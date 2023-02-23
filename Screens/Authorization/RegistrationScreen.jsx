@@ -10,6 +10,7 @@ import {
   Platform,
   Dimensions,
   TouchableOpacity,
+  Image
 } from "react-native";
 
 import styles from "./auth.styles";
@@ -71,6 +72,12 @@ const RegistrationScreen = () => {
                   width: dimensions,
                 }}
               >
+                <View style={styles.avatarWrapper}>
+                  <Image
+                    style={styles.avatar}
+                    source={require("../../images/avatar.png")}
+                  ></Image>
+                </View>
                 <Text style={styles.title}>Реєстрація</Text>
                 <View>
                   <TextInput

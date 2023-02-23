@@ -29,7 +29,6 @@ const styles = StyleSheet.create({
   },
   form: {
     marginHorizontal: 16,
-    // marginBottom: 32,
   },
   input: {
     borderWidth: 1,
@@ -51,6 +50,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     right: 26,
     top: 16,
+    color: "#1B4371",
   },
   btn: {
     backgroundColor: "#FF6C00",
@@ -74,6 +74,18 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto-Regular",
     fontWeight: "400",
     fontSize: 16,
+    alignItems: "center",
+  },
+  avatarWrapper: {
+    alignItems: "center",
+    marginBottom: 60,
+  },
+  avatar: {
+    position: "absolute",
+    top: -50,
+    width: 120,
+    height: 120,
+    borderRadius: 16,
   },
 });
 
