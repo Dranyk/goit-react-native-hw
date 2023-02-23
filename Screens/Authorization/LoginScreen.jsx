@@ -1,9 +1,8 @@
-import React, { useState, use } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
   TextInput,
-  Alert,
   ImageBackground,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
@@ -15,12 +14,41 @@ import {
 
 import styles from "./auth.styles";
 
-const LoginScreen = ({ navigation }) => {
+const initialState = {
+  email: "",
+  password: "",
+};
+
+const LoginScreen = () => {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
+  const [state, setState] = useState(initialState);
+  const [hidePass, setHidePass] = useState(true);
+  const [dimensions, setDimensions] = useState(
+    Dimensions.get("window").width - 16 * 2
+  );
+
+  useEffect(() => {
+    const onChange = () => {
+      const width = Dimensions.get("window").width - 20 * 2;
+
+      setDimensions(width);
+    };
+    Dimensions.addEventListener("change", onChange);
+    return () => {
+      Dimensions.removeEventListener("change", onChange);
+    };
+  }, []);
 
   const keyboardHide = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
+  };
+
+  const handleSubmit = () => {
+    setIsShowKeyboard(false);
+    Keyboard.dismiss();
+    console.log(state);
+    setState(initialState);
   };
 
   return (
@@ -38,33 +66,52 @@ const LoginScreen = ({ navigation }) => {
                 style={{
                   ...styles.form,
                   marginBottom: isShowKeyboard ? 20 : 144,
+                  width: dimensions,
                 }}
               >
                 <Text style={styles.title}>Увійти</Text>
-                <TextInput
-                  onFocus={() => setIsShowKeyboard(true)}
-                  placeholder="Адреса електронної пошти"
-                  style={styles.input}
-                />
+                <View>
+                  <TextInput
+                    onFocus={() => setIsShowKeyboard(true)}
+                    placeholder="Адреса електронної пошти"
+                    style={styles.input}
+                    value={state.email}
+                    onChangeText={(value) =>
+                      setState((prevState) => ({ ...prevState, email: value }))
+                    }
+                  />
+                </View>
+
                 <View>
                   <TextInput
                     onFocus={() => setIsShowKeyboard(true)}
                     placeholder="Пароль"
                     secureTextEntry={true}
                     style={styles.input}
+                    value={state.password}
+                    onChangeText={(value) =>
+                      setState((prevState) => ({
+                        ...prevState,
+                        password: value,
+                      }))
+                    }
                   />
-                  <Text style={styles.inputShowPasword}>Показати</Text>
+
+                  <Text
+                    style={styles.inputShowPasword}
+                    onPress={() => setHidePass(!hidePass)}
+                  >
+                    Показати
+                  </Text>
                 </View>
                 <TouchableOpacity
                   style={styles.btn}
                   activeOpacity={0.7}
-                  onPress={keyboardHide}
+                  onPress={handleSubmit}
                 >
                   <Text style={styles.btnText}>Увійти</Text>
                 </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => navigation.navigate("Registration")}
-                >
+                <TouchableOpacity>
                   <Text style={styles.singInText}>
                     Немає облікового запису? Зареєструватись
                   </Text>

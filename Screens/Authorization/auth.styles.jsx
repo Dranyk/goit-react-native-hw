@@ -24,11 +24,12 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
     alignItems: "center",
-    height: 489,
+    // height: 489,
+
   },
-  form : {
+  form: {
     marginHorizontal: 16,
-    marginBottom: 32,
+    // marginBottom: 32,
   },
   input: {
     borderWidth: 1,
@@ -44,6 +45,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 16,
     position: "relative",
+  },
+  inputShowPasword: {
+    position: "absolute",
+    fontSize: 16,
+    right: 26,
+    top: 16,
   },
   btn: {
     backgroundColor: "#FF6C00",
@@ -61,8 +68,8 @@ const styles = StyleSheet.create({
   },
   singInText: {
     color: "#1B4371",
-    marginLeft: "auto",
-    marginRight: "auto",
+    // marginLeft: "auto",
+    // marginRight: "auto",
     marginTop: 16,
     fontFamily: "Roboto-Regular",
     fontWeight: "400",
