@@ -1,11 +1,16 @@
-import { StyleSheet, View } from "react-native";
-import { useState, useCallback  } from "react";
-
+import { } from "react-native";
+import React, { useState } from "react";
+import { createStackNavigator } from "@react-navigation/stack";
+import { NavigationContainer } from "@react-navigation/native";
 import { useFonts } from 'expo-font';
 
-import LoginScreen from "./Screens/Authorization/LoginScreen";
-import RegistrationScreen from "./Screens/Authorization/RegistrationScreen";
+import { useRoute } from "./router";
 
+// import LoginScreen from "./Screens/Authorization/LoginScreen";
+// import RegistrationScreen from "./Screens/Authorization/RegistrationScreen";
+// import PostsScreen from "./Screens/Main/PostsScreen";
+
+// const AuthStack = createStackNavigator();
 
 export default function App() {
 
@@ -14,14 +19,35 @@ export default function App() {
     'Roboto-Regular': require('./assets/fonts/Roboto-Regular.ttf'),
   });
 
+  const routing = useRoute(true);
+
   if (!loaded) {
     return null;
   }
 
   return (
-    <>
-      <RegistrationScreen />
-      {/* <LoginScreen /> */}
-    </>
+    //   <NavigationContainer>
+    //   <AuthStack.Navigator>
+    //     <AuthStack.Screen
+    //       options={{
+    //         headerShown: false,
+    //       }}
+    //       name="Login"
+    //       component={LoginScreen}
+    //     />
+    //     <AuthStack.Screen
+    //       options={{
+    //         headerShown: false,
+    //       }}
+    //       name="Registration"
+    //       component={RegistrationScreen}
+    //     />
+    //   </AuthStack.Navigator>
+    // </NavigationContainer>
+    // <NavigationContainer>
+    // <PostsScreen />
+    //   </NavigationContainer>
+
+     <NavigationContainer>{routing}</NavigationContainer>
   );
 }
