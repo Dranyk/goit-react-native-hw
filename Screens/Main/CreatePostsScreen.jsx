@@ -2,22 +2,11 @@ import { View, Text, Image, TextInput, StyleSheet } from "react-native";
 import React, { useState, useEffect } from "react";
 import { Camera } from "expo-camera";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import * as Location from "expo-location";
 
 const CreatePostScreen = ({ navigation }) => {
   const [camera, setCamera] = useState(null);
-  const [photo, setPhoto] = useState("");
-
-  // useEffect(() => {
-  //   (async () => {
-  //     let { status } = await Location.requestForegroundPermissionsAsync();
-  //     console.log(status);
-
-  //     if (status !== "granted") {
-  //       setErrorMsg("У доступі до місцезнаходження відмовлено");
-  //       return;
-  //     }
-  //   })();
-  // }, []);
+  const [photo, setPhoto] = useState(null);
 
   const takePhoto = async () => {
     const photo = await camera.takePictureAsync();
@@ -70,13 +59,13 @@ const styles = StyleSheet.create({
   containerBcg: {
     flex: 1,
     backgroundColor: "#FFF",
-    marginHorizontal: 16,
   },
   camera: {
     height: 300,
     marginTop: 50,
     alignItems: "center",
     borderRadius: 8,
+    marginHorizontal: 16,
   },
   snap: {
     color: "#FFF",
@@ -114,6 +103,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 8,
     marginBottom: 32,
+    marginHorizontal: 16,
   },
   input: {
     color: "#212121",
@@ -129,6 +119,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 16,
     position: "relative",
+    marginHorizontal: 16,
   },
   submitBtn: {
     backgroundColor: "#FF6C00",
@@ -136,6 +127,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginTop: 22,
+    marginHorizontal: 16,
   },
   submitBtnText: {
     color: "#FFF",
