@@ -14,6 +14,9 @@ import {
 
 import styles from "./auth.styles";
 
+import { useDispatch } from 'react-redux';
+import { authSignInUser } from '../../redux/auth/authOperations'
+
 const initialState = {
   email: "",
   password: "",
@@ -23,6 +26,8 @@ const LoginScreen = ({ navigation }) => {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [state, setState] = useState(initialState);
   const [showPassword, setShowPassword] = useState(false);
+
+  const dispatch = useDispatch();
 
   const [dimensions, setDimensions] = useState(
     Dimensions.get("window").width - 16 * 2
@@ -49,6 +54,7 @@ const LoginScreen = ({ navigation }) => {
   const handleSubmit = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
+    dispatch(authSignInUser(state));
     console.log(state);
     setState(initialState);
   };

@@ -15,6 +15,9 @@ import {
 
 import styles from "./auth.styles";
 
+import { useDispatch } from 'react-redux';
+import { authSignUpUser } from '../../redux/auth/authOperations'
+
 const initialState = {
   login: "",
   email: "",
@@ -25,6 +28,9 @@ const RegistrationScreen = ({navigation}) => {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [state, setState] = useState(initialState);
   const [showPassword, setShowPassword] = useState(false);
+
+  const dispatch = useDispatch();
+
   const [dimensions, setDimensions] = useState(
     Dimensions.get("window").width - 16 * 2
   );
@@ -52,6 +58,7 @@ const RegistrationScreen = ({navigation}) => {
   const handleSubmit = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
+    dispatch(authSignUpUser(state));
     console.log(state);
     setState(initialState);
   };
@@ -129,7 +136,7 @@ const RegistrationScreen = ({navigation}) => {
                   activeOpacity={0.7}
                   onPress={handleSubmit}
                 >
-                  <Text style={styles.btnText}>Увійти</Text>
+                  <Text style={styles.btnText}>Зареєструватись</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.singInText}>
                   <Text style={styles.singInText} onPress={() => navigation.navigate("Login")}>Вже є акаунт? Увійти</Text>
