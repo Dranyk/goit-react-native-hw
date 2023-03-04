@@ -7,6 +7,7 @@ import { Provider } from "react-redux";
 import { useRoute } from "./router";
 import { store } from "./redux/store";
 
+
 export default function App() {
   const [loaded] = useFonts({
     "Roboto-Bold": require("./assets/fonts/Roboto-Bold.ttf"),
