@@ -11,6 +11,8 @@ import PostsScreen from "./Screens/Main/PostsScreen";
 import CreatePostsScreen from "./Screens/Main/CreatePostsScreen";
 import ProfileScreen from "./Screens/Main/ProfileScreen";
 
+import BtnOut from "./components/BtnOut";
+
 // icons import
 import { Ionicons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
@@ -87,6 +89,7 @@ export const useRoute = (isAuth) => {
         tabBarIcon: ({ focused, color, size }) => {
           return <Feather name="user" size={24} color={color} />;
         },
+        headerRight: () => <BtnOut />,
       }}
     />
   </MainTab.Navigator>

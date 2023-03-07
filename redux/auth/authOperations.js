@@ -70,3 +70,17 @@ import {
     }
   };
   
+export const authStateChangeUser = () => async (dispath, getState) => {
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      const userUpdateProfile = {
+        userId: user.uid,
+        nickname: user.displayName,
+        photoURL: user.photoURL,
+        email: user.email,
+      };
+      dispath(updateUserProfile(userUpdateProfile));
+      dispath(authStateChange({ stateChange: true }));
+    }
+  });
+};
