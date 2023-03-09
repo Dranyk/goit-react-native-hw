@@ -7,7 +7,7 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
-import { onSnapshot, collection } from "firebase/firestore";
+import { onSnapshot, doc, collection } from "firebase/firestore";
 import { db } from "../../firebase/config";
 
 // Icons
@@ -16,19 +16,33 @@ import { EvilIcons } from "@expo/vector-icons";
 const DefaultScreenPost = ({ route, navigation }) => {
   const [posts, setPosts] = useState([]);
 
+  // const getAllPost = async () => {
+  //   try {
+  //     onSnapshot(doc(db, "posts"), (doc) => {
+  //       const posts = doc.docs.map((el) => ({ ...el.data() }));
+  //       console.log(posts);
+  //       setPosts(posts);
+  //     });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   getAllPost();
+  // }, []);
+
   const getAllPost = async () => {
-    try {
-      onSnapshot(collection(db, "posts"), (doc) => {
-        const posts = doc.docs.map((el) => ({ ...el.data() }));
-        console.log(posts);
-        setPosts(posts);
-      });
-    } catch (error) {
-      console.log(error);
-    }
+    await db
+      .firestore()
+      .collection("posts")
+      .onSnapshot((data) =>
+        setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+      );
   };
 
   useEffect(() => {
+    console.log("d");
     getAllPost();
   }, []);
 
