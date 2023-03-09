@@ -10,7 +10,7 @@ const Main = () => {
 
   useEffect(() => {
     dispath(authStateChangeUser());
-  }, []);
+  }, [stateChange]);
 
   const routing = useRoute(stateChange);
 
