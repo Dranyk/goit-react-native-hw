@@ -1,34 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { View, StyleSheet, FlatList, Image, Button } from "react-native";
+import React from "react";
+import { View, Text, StyleSheet } from "react-native";
 
-const Home = ({ route, navigation }) => {
-  const [post, setPost] = useState([]);
-
-  useEffect(() => {
-    if (route.params) {
-      setPost((prevState) => [...prevState, route.params]);
-    }
-  }, [route.params]);
-
+const Home = () => {
   return (
     <View style={styles.container}>
-      <FlatList
-        data={post}
-        keyExtractor={(item, indx) => indx.toString()}
-        renderItem={({ item }) => (
-          <View style={styles.imageContainer}>
-            <Image source={{ uri: item.photo }} style={styles.image} />
-          </View>
-        )}
-      />
-      <Button
-        title="MapScreen"
-        onPress={() => navigation.navigate("MapScreen")}
-      />
-      <Button
-        title="CommentsScreen"
-        onPress={() => navigation.navigate("CommentsScreen")}
-      />
+      <Text>Home</Text>
     </View>
   );
 };
@@ -37,13 +13,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-  },
-  imageContainer: {
-    marginBottom: 10,
-  },
-  image: {
-    marginHorizontal: 10,
-    height: 200,
+    alignItems: "center",
   },
 });
 

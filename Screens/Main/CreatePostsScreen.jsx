@@ -1,29 +1,106 @@
-import { View, Text, Image, TextInput, StyleSheet } from "react-native";
 import React, { useState, useEffect } from "react";
-import { Camera } from "expo-camera";
+import { View, Text, TextInput, StyleSheet, Image } from "react-native";
+import { Camera, CameraType } from "expo-camera";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import * as Location from "expo-location";
+import { getDownloadURL, uploadBytes, ref } from "firebase/storage";
+import { useSelector } from "react-redux";
+import { collection, addDoc } from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
+import { storage } from "../../firebase/config";
 
-const CreatePostScreen = ({ navigation }) => {
+const CreatePostsScreen = ({ navigation }) => {
   const [camera, setCamera] = useState(null);
-  const [photo, setPhoto] = useState(null);
+  const [photo, setPhoto] = useState("");
+  const [comment, setComment] = useState("");
+  const [location, setLocation] = useState(null);
+  const [cameraReady, setCameraReady] = useState(false);
+
+  const { userId, nickname } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    (async () => {
+      await Camera.requestCameraPermissionsAsync();
+
+      let { status } = await Location.requestForegroundPermissionsAsync();
+
+      if (status !== "granted") {
+        setErrorMsg("У доступі до місцезнаходження відмовлено");
+        return;
+      }
+
+      const location = await Location.getCurrentPositionAsync();
+      setLocation(location);
+    })();
+  }, []);
 
   const takePhoto = async () => {
-    const photo = await camera.takePictureAsync();
-    const location = await Location.getCurrentPositionAsync();
-    console.log("latitude", location.coords.latitude);
-    console.log("longitude", location.coords.longitude);
-    setPhoto(photo.uri);
+    console.log(location);
+    console.log(comment);
+    const { uri } = await camera.takePictureAsync();
+    setPhoto(uri);
+  };
+
+  const handleCameraReady = () => {
+    setCameraReady(true);
+  };
+
+  const toggleCameraType = () => {
+    setType((current) =>
+      current === CameraType.back ? CameraType.front : CameraType.back
+    );
   };
 
   const sendPhoto = () => {
-    navigation.navigate("Home", { photo });
+    uploadPostToServer();
+    navigation.navigate("DefaultScreenPost");
+  };
+
+  const uploadPostToServer = async () => {
+    const photo = await uploadPhotoToServer();
+
+    try {
+      const db = getFirestore();
+      const newCollectionRef = collection(db, "posts");
+      await addDoc(newCollectionRef, {
+        photo,
+        comment,
+        location: location.coords,
+        userId,
+        nickname,
+      });
+      console.log(`Колекція створена успішно!`);
+    } catch (error) {
+      console.error("Помилка при створенні колекції:", error);
+    }
+  };
+
+  const uploadPhotoToServer = async () => {
+    try {
+      const response = await fetch(photo);
+      const file = await response.blob();
+      const uniquePostId = Date.now().toString();
+
+      const data = ref(storage, `postImage/${uniquePostId}`);
+      await uploadBytes(data, file);
+
+      const processedPhoto = await getDownloadURL(data);
+      return processedPhoto;
+    } catch (error) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log(`errorCode: ${errorCode}, errorMessage: ${errorMessage}`);
+    }
   };
 
   return (
     <View style={styles.containerBcg}>
       <View style={styles.container}>
-        <Camera style={styles.camera} ref={setCamera}>
+        <Camera
+          style={styles.camera}
+          ref={setCamera}
+          onCameraReady={handleCameraReady}
+        >
           {photo && (
             <View style={styles.takePhotoContainer}>
               <Image
@@ -38,7 +115,11 @@ const CreatePostScreen = ({ navigation }) => {
         </Camera>
         <View style={styles.formWrapper}>
           <Text style={styles.title}>Завантажте фото</Text>
-          <TextInput style={styles.input} placeholder="Назва..." />
+          <TextInput
+            style={styles.input}
+            placeholder="Назва..."
+            onChangeText={setComment}
+          />
           <TextInput style={styles.input} placeholder="Місцевість..." />
           <TouchableOpacity
             style={styles.submitBtn}
@@ -56,32 +137,33 @@ const CreatePostScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-
+    marginHorizontal: 16,
   },
   containerBcg: {
     flex: 1,
     backgroundColor: "#FFF",
   },
   camera: {
-    height: 300,
-    marginTop: 50,
-    alignItems: "center",
+    height: "40%",
+    borderWidth: 1,
     borderRadius: 8,
-    marginHorizontal: 16,
+    justifyContent: "flex-end",
+    alignItems: "center",
+    marginTop: 32,
   },
   snap: {
     color: "#FFF",
   },
   snapContainer: {
-    marginTop: 200,
     borderWidth: 1,
-    borderColor: "#ff0000",
+    borderRadius: 50,
+    borderColor: "#FF0000",
     width: 70,
     height: 70,
-    borderRadius: 50,
+    marginTop: 200,
     justifyContent: "center",
     alignItems: "center",
-    // marginBottom: 20,
+    marginBottom: 20,
   },
   takePhotoContainer: {
     position: "absolute",
@@ -105,7 +187,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 8,
     marginBottom: 32,
-    marginHorizontal: 16,
   },
   input: {
     color: "#212121",
@@ -121,7 +202,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 16,
     position: "relative",
-    marginHorizontal: 16,
   },
   submitBtn: {
     backgroundColor: "#FF6C00",
@@ -129,7 +209,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginTop: 22,
-    marginHorizontal: 16,
   },
   submitBtnText: {
     color: "#FFF",
@@ -141,4 +220,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CreatePostScreen;
+export default CreatePostsScreen;

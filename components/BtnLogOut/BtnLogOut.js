@@ -1,10 +1,10 @@
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { useDispatch } from "react-redux";
-import { authSignOutUser } from "../redux/auth/authOperations";
+import { authSignOutUser } from "../../redux/auth/authOperations";
 
 import { Feather } from "@expo/vector-icons";
 
-const BtnOut = () => {
+const BtnLogOut = () => {
   const dispatch = useDispatch();
 
   const singOut = () => {
@@ -25,4 +25,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BtnOut;
+export default BtnLogOut;
