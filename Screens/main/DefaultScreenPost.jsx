@@ -37,7 +37,6 @@ const DefaultScreenPost = ({ route, navigation }) => {
     }
   };
 
-
   useEffect(() => {
     console.log("d");
     getAllPost();

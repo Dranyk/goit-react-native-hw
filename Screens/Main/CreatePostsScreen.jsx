@@ -66,15 +66,10 @@ const CreatePostsScreen = ({ navigation }) => {
       await addDoc(collection(db, "posts"), {
         photo,
         comment,
-        location,
+        location: location.coords,
         userId,
         nickname,
-      });
-      // const createPost = await firebase
-      //   .firestore()
-      //   .collection("posts")
-      //   .add({ photo, comment, location: location.coords, userId, nickName });
-    
+      }); 
       console.log(`Колекція створена успішно!`);
     } catch (error) {
       console.error("Помилка при створенні колекції:", error);
