@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import firebase from 'firebase/app';
 import { View, Text, TextInput, StyleSheet, Image } from "react-native";
 import { Camera, CameraType } from "expo-camera";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -8,6 +9,7 @@ import { useSelector } from "react-redux";
 import { collection, addDoc } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import { storage } from "../../firebase/config";
+
 
 const CreatePostsScreen = ({ navigation }) => {
   const [camera, setCamera] = useState(null);
@@ -61,14 +63,18 @@ const CreatePostsScreen = ({ navigation }) => {
 
     try {
       const db = getFirestore();
-      const newCollectionRef = collection(db, "posts");
-      await addDoc(newCollectionRef, {
+      await addDoc(collection(db, "posts"), {
         photo,
         comment,
-        location: location.coords,
+        location,
         userId,
         nickname,
       });
+      // const createPost = await firebase
+      //   .firestore()
+      //   .collection("posts")
+      //   .add({ photo, comment, location: location.coords, userId, nickName });
+    
       console.log(`Колекція створена успішно!`);
     } catch (error) {
       console.error("Помилка при створенні колекції:", error);

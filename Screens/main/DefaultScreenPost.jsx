@@ -7,7 +7,9 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
-import { onSnapshot, doc, collection } from "firebase/firestore";
+import { useSelector, useDispatch } from "react-redux";
+import { onSnapshot, collection, query, orderBy, where } from 'firebase/firestore';
+// import { collection, addDoc } from "firebase/firestore";
 import { db } from "../../firebase/config";
 
 // Icons
@@ -16,30 +18,25 @@ import { EvilIcons } from "@expo/vector-icons";
 const DefaultScreenPost = ({ route, navigation }) => {
   const [posts, setPosts] = useState([]);
 
-  // const getAllPost = async () => {
-  //   try {
-  //     onSnapshot(doc(db, "posts"), (doc) => {
-  //       const posts = doc.docs.map((el) => ({ ...el.data() }));
-  //       console.log(posts);
-  //       setPosts(posts);
-  //     });
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
 
-  // useEffect(() => {
-  //   getAllPost();
-  // }, []);
+  const {  userId } = useSelector((state) => state.auth);
 
   const getAllPost = async () => {
-    await db
-      .firestore()
-      .collection("posts")
-      .onSnapshot((data) =>
-        setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+    try {
+      const ref = query(
+        collection(db, "posts"),
+        where("userId", "==", `${userId}`)
       );
+      onSnapshot(ref, (snapshot) => {
+        setPosts(
+          snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+        );
+      });
+    } catch (error) {
+      console.log("Помилка getAllPost", error.message);
+    }
   };
+
 
   useEffect(() => {
     console.log("d");
