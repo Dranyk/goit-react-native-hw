@@ -63,13 +63,14 @@ const CreatePostsScreen = ({ navigation }) => {
 
     try {
       const db = getFirestore();
-      await addDoc(collection(db, "posts"), {
+      const newCollectionRef = collection(db, "posts");
+      await addDoc(newCollectionRef, {
         photo,
         comment,
         location: location.coords,
         userId,
         nickname,
-      }); 
+      });
       console.log(`Колекція створена успішно!`);
     } catch (error) {
       console.error("Помилка при створенні колекції:", error);
